@@ -78,8 +78,16 @@ hw1plot_3 <- (ggplot(problem2_df, aes(x=x, y=y))
             + geom_abline(intercept = 0, slope = -1)
             + theme(plot.title = element_text(size = 10, face = "bold")))
 
-library(gridExtra)
-grid.arrange(hw1plot_1, hw1plot_2, hw1plot_3, nrow=1)
+hw1plot_1
+hw1plot_2
+hw1plot_3
+
+#library(gridExtra) --- for my viewing pleasure when I was working on this so I don't have to scroll through in viewer
+#grid.arrange(hw1plot_1, hw1plot_2, hw1plot_3, nrow=1)
 ```
 
-The color arrangement seems to be the exact same for the logical and factor variables, it separates each TRUE/FALSE into a discrete value and assigns it a particular color (in this case a light red and cyan). My guess on why this is, is that similar to how mathematical functions automaticcaly register logicals as 0/1's , in this setting it automatically changes it to factors of 2 levels: TRUE/FALSE. 
+The color arrangement seems to be the exact same for the logical and factor variables, each point has a distinct color allocated based on the discrete values TRUE and FALSE (in this case a light red and cyan).
+
+MY hypothesis/guess on why this is, is that similar to how R automatically register logicals as 0/1's for mathematical functions, that in this setting, ggplot2 is written such that when logicals enter an aes, it automatically considers it a factor of 2 levels: TRUE/FALSE which have correspoding numbers to them, in this case 1 and 2. This would then allow R to have an index to pull certain "colors" from some sort of color vector. Otherwise with FALSE being 0, it would be difficult to use that as an index since R objects start indexing at 1. (Just my guess)
+
+In regards to the second plot where we have the blue and black dots, it seems in this case our color is based on some sort of gradient, the range of which is defined as 0 to 1. In our case we only have exactly 0's and 1's because we coerced it from logical to numeric. As a result we have a concentration from each of the extremes of the gradient. Say if we plugged in x as our color we would see this entire black(low)-blue(high) gradient generated going left to right. The same could be said for if we plugged in y instead, but we would generate that gradient from bottom to top. 
