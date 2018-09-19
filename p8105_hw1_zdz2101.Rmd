@@ -1,0 +1,16 @@
+---
+title: "p8105_hw1_zdz2101"
+author: "Zelos Zhu"
+date: "9/18/2018"
+output: html_document
+---
+
+#Problem 1
+```{r}
+
+```
+
+#Problem 2
+```{r}
+
+```
