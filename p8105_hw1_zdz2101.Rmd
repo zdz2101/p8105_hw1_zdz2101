@@ -17,6 +17,7 @@ problem1_df <- tibble(numeric_vec = runif(n = 10, min = 0, max = 5),
                       factor_vec = factor(  c( rep( c("small", "medium", "large"), 3), "x-large")  )
                       )
 print(problem1_df)
+
 #means <- apply(problem1_df, 2, mean) --- doesn't work
 #Above line coerces all into NA, probably because there is non-numeric in it, good to know
 
@@ -29,19 +30,34 @@ means_prob1
 
 The mean() function successfully worked for the numeric and logical vectors of the data frame while it produced NAs for the character and factor vectors. This makes sense: the mean of the first vector could be calculated since it is a numeric variable. It's exactly what we think it should be: the sum of the elements divided by the number of elements. As a result the mean is `r round(means_prob1[1], 2)`. 
 
-Interestingly enough, the second vector in the data frame could also have a mean and that is because R seems to automatically consider FALSE into 0 and TRUE into 1. So, taking a "mean" of a logical allows us to see the proportion of TRUE cases, similarly if we were to take the sum we would see the total counts of TRUE's. As expected, a mean could not be taken from neither the character or factor varaibles and that is because character and factor variables cannot be used with traditional "mathematical" functions. 
+Interestingly enough, the second vector in the data frame could also have a mean and that is because R seems to automatically consider FALSE into 0 and TRUE into 1. So, taking a "mean" of a logical allows us to see the proportion of TRUE cases, similarly if we were to take the sum we would see the total counts of TRUE's. 
 
-```{r Problem 1b}
-mean_converted_char <- mean(as.numeric(as.factor(problem1_df$char_vec)))
-mean_converted_char
+As expected, a mean could not be taken from neither the character or factor varaibles and that is because character and factor variables cannot be used with traditional "mathematical" functions. As a result taking their means produce a warning and the value we get is NA. 
 
-mean_converted_factor <- mean(as.numeric(problem1_df$factor_vec))
-mean_converted_factor
+```{r Problem 1b, eval = FALSE}
+as.numeric(problem1_df$logical_vec)
+as.numeric(problem1_df$char_vec)
+as.numeric(problem1_df$factor_vec)
 ```
 
-Once you convert character into factor and then numeric, you can use traditional math functions, but it has practically no meaning. So in the case of my character vector, I had 10 unique "character" values, which turned into 10 different levels of factors, and as a result when you convert the factor into numeric it turned into a jumbled mess of numbers: `r as.numeric(as.factor(problem1_df$char_vec))`. The mean of that is `r mean_converted_char` but this does not particularly have much interpretability compared to the 10 word sentence I wrote. 
+The logical vector turned into a vector of 0's and 1's, the FALSEs being 0, the TRUEs being 1.
 
-The same concept applies for my 4th factor vector, there are only 4 unique values, so it has 4 levels, so when coerced numerically it came out to `r c(rep(c(1:3),3), 4)` and mean of that is `r mean_converted_factor`. Again this does not quite have any sort of meaning compared to a vector of "sizes" which I initially created.
+The character vector turned into a vector of NA's. Though I imagine if you wrote out numbers in character form, they can convert properly. For example, executing the line
+
+as.numeric(c("1","2","3")) 
+
+would properly display 1,2,3. 
+
+The factor vector turns in a vector that consist of the numbers `r 1:(length(levels(problem1_df$factor_vec)))`. I'm assuming R assigns each level of a factor a number and when you use the as.numeric() function with it, it pulls these numbers. 
+
+```{r Problem 1c, eval = FALSE}
+as.numeric(as.factor(problem1_df$char_vec))
+as.numeric(as.character(problem1_df$factor_vec))
+```
+
+When you convert the character vector into a factor, it turns into a vector of 10 levels because I had 10 unique values, in which case when as.numeric() is applied it turns into a scrambled mess of the numbers 1 to 10. 
+
+When you convert the factor vector into character and then attempt to use as.numeric() it displays a warning and we get a vector of NA's.
 
 
 #Problem 2
@@ -52,9 +68,10 @@ problem2_df <- tibble( x = rnorm(1000),
                        num_coerce = as.numeric(is_sum_positive),
                        factor_coerce = as.factor(is_sum_positive))
 print(head(problem2_df))
+str(problem2_df)
 ```
 
-The size of the dataset is `r nrow(problem2_df)` rows and `r ncol(problem2_df)` columns.
+The size of the dataset is `r nrow(problem2_df)` rows (observations) and `r ncol(problem2_df)` columns (variables).
 The mean of x is `r round( mean(problem2_df$x), 2)`.
 The median of x is `r round( median(problem2_df$x), 2)`.
 The proportion of cases for which the logical vector is TRUE is `r round( mean(problem2_df$is_sum_positive), 2)`. 
@@ -79,9 +96,10 @@ hw1plot_3 <- (ggplot(problem2_df, aes(x=x, y=y))
             + theme(plot.title = element_text(size = 10, face = "bold")))
 
 hw1plot_1
+ggsave(filename = "hw1plot1.png")
+
 hw1plot_2
 hw1plot_3
-
 #library(gridExtra) --- for my viewing pleasure when I was working on this so I don't have to scroll through in viewer
 #grid.arrange(hw1plot_1, hw1plot_2, hw1plot_3, nrow=1)
 ```
