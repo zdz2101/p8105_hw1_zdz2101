@@ -17,6 +17,7 @@ problem1_df <- tibble(numeric_vec = runif(n = 10, min = 0, max = 5),
                       factor_vec = factor(  c( rep( c("small", "medium", "large"), 3), "x-large")  )
                       )
 print(problem1_df)
+str(problem1_df)
 
 #means <- apply(problem1_df, 2, mean) --- doesn't work
 #Above line coerces all into NA, probably because there is non-numeric in it, good to know
@@ -61,7 +62,7 @@ When you convert the factor vector into character and then attempt to use as.num
 
 
 #Problem 2
-```{r Prob2 make plotting df}
+```{r Problem 2 make plotting df}
 problem2_df <- tibble( x = rnorm(1000),
                        y = rnorm(1000),
                        is_sum_positive = (x + y) > 0,
@@ -76,7 +77,7 @@ The mean of x is `r round( mean(problem2_df$x), 2)`.
 The median of x is `r round( median(problem2_df$x), 2)`.
 The proportion of cases for which the logical vector is TRUE is `r round( mean(problem2_df$is_sum_positive), 2)`. 
 
-```{r Prob2 graphs}
+```{r Problem 2 graphs}
 hw1plot_1 <- (ggplot(problem2_df, aes(x=x, y=y))
             + geom_point( aes(color = is_sum_positive))
             + ggtitle("Scatterplot of 1000 points based on normal distribution")
